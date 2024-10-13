@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marksheet Preview</title>
+    <style>
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .marksheet {
+            width: 90%;
+            margin: auto;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        .marksheet th, .marksheet td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+        .student-info {
+            margin: 20px 0;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="marksheet-content">
+        <div class="header">
+            <h2 id="school-name"></h2>
+            <p id="udise"></p>
+            <p id="circle"></p>
+            <p id="district"></p>
+            <p id="session"></p>
+        </div>
+
+        <div class="student-info">
+            <p><strong>Name of the Student:</strong> <span id="student-name"></span></p>
+            <p><strong>Class:</strong> Preprimary</p>
+            <p><strong>Medium:</strong> <span id="medium"></span></p>
+            <p><strong>Roll No:</strong> <span id="roll"></span></p>
+            <p><strong>Mother's Name:</strong> <span id="mother-name"></span> &nbsp; <strong>Father's Name:</strong> <span id="father-name"></span></p>
+            <p><strong>Student ID:</strong> <span id="student-id"></span></p>
+        </div>
+
+        <!-- Table for marksheet -->
+        <table class="marksheet">
+            <thead>
+                <tr>
+                    <th>Formative Indicator</th>
+                    <th>Marks</th>
+                    <th>Summative Indicator</th>
+                    <th>Total</th>
+                    <th>Grade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Questioning and Experimentation</td>
+                    <td id="questioning-marks"></td>
+                    <td>Bengali</td>
+                    <td id="bengali-marks"></td>
+                    <td id="bengali-grade"></td>
+                </tr>
+                <tr>
+                    <td>Interpretation and Application</td>
+                    <td id="interpretation-marks"></td>
+                    <td>English</td>
+                    <td id="english-marks"></td>
+                    <td id="english-grade"></td>
+                </tr>
+                <tr>
+                    <td>Empathy and Co-operation</td>
+                    <td id="empathy-marks"></td>
+                    <td>Mathematics</td>
+                    <td id="math-marks"></td>
+                    <td id="math-grade"></td>
+                </tr>
+                <tr>
+                    <td>Aesthetic and Creative Expression</td>
+                    <td id="aesthetic-marks"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p><strong>Result:</strong> Promoted</p>
+    </div>
+
+    <button id="go-back">Edit</button>
+    <button id="downloadBtn">Download PDF</button>
+
+    <!-- Include jsPDF and html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        // Retrieve data from localStorage
+        const data = JSON.parse(localStorage.getItem('marksheetData'));
+        if (data) {
+            document.getElementById('school-name').innerText = data.schoolName;
+            document.getElementById('udise').innerText = 'UDISE Code: ' + data.udise;
+            document.getElementById('circle').innerText = 'Circle: ' + data.circle;
+            document.getElementById('district').innerText = 'District: ' + data.district;
+            document.getElementById('session').innerText = 'Academic Session: ' + data.session;
+            document.getElementById('student-name').innerText = data.studentName;
+            document.getElementById('roll').innerText = data.roll;
+            document.getElementById('mother-name').innerText = data.motherName;
+            document.getElementById('father-name').innerText = data.fatherName;
+            document.getElementById('student-id').innerText = data.studentId;
+            document.getElementById('medium').innerText = data.medium;
+
+            // Formative marks
+            document.getElementById('questioning-marks').innerText = data.questioning;
+            document.getElementById('interpretation-marks').innerText = data.interpretation;
+            document.getElementById('empathy-marks').innerText = data.empathy;
+            document.getElementById('aesthetic-marks').innerText = data.aesthetic;
+
+            // Summative marks and grades
+            document.getElementById('bengali-marks').innerText = data.bengali;
+            document.getElementById('bengali-grade').innerText = calculateGrade(data.bengali);
+            document.getElementById('english-marks').innerText = data.english;
+            document.getElementById('english-grade').innerText = calculateGrade(data.english);
+            document.getElementById('math-marks').innerText = data.math;
+            document.getElementById('math-grade').innerText = calculateGrade(data.math);
+        }
+
+        function calculateGrade(marks) {
+            if (marks >= 80) return 'A';
+            if (marks >= 65) return 'B';
+            if (marks >= 50) return 'C';
+            if (marks >= 35) return 'D';
+            return 'E';
+        }
+
+        // Go back to the form for edits
+        document.getElementById('go-back').addEventListener('click', function() {
+            window.history.back();
+        });
+
+        // Download the entire marksheet content as PDF
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const { jsPDF } = window.jspdf;
+            html2canvas(document.getElementById('marksheet-content')).then(canvas => {
+                const doc = new jsPDF('landscape', 'mm', 'a4');  // Set orientation to 'landscape'
+                const imgData = canvas.toDataURL('image/png');
+
+                const imgWidth = 297; // A4 width in mm (landscape mode)
+                const pageHeight = 210; // A4 height in mm
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+
+                let position = 0;
+                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    doc.addPage();
+                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                doc.save('marksheet.pdf');
+            });
+        });
+    </script>
+
+</body>
+</html>

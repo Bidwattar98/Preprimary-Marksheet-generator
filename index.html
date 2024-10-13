@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marksheet Input</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        form {
+            max-width: 600px;
+            margin: auto;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Enter Marksheet Details</h2>
+
+    <form id="marksheet-form">
+        <!-- General Details -->
+        <label for="school-name">School Name</label>
+        <input type="text" id="school-name" required>
+
+        <label for="udise">UDISE Code</label>
+        <input type="text" id="udise" required>
+
+        <label for="circle">Circle</label>
+        <input type="text" id="circle" required>
+
+        <label for="district">District</label>
+        <input type="text" id="district" required>
+
+        <label for="session">Academic Session</label>
+        <input type="text" id="session" required>
+
+        <label for="student-name">Student Name</label>
+        <input type="text" id="student-name" required>
+
+        <label for="roll">Roll No</label>
+        <input type="text" id="roll" required>
+
+        <label for="mother-name">Mother's Name</label>
+        <input type="text" id="mother-name" required>
+
+        <label for="father-name">Father's Name</label>
+        <input type="text" id="father-name" required>
+
+        <label for="student-id">Student ID</label>
+        <input type="text" id="student-id" required>
+
+        <label for="medium">Medium</label>
+        <input type="text" id="medium" required>
+
+        <!-- Marks Input -->
+        <h3>Formative Evaluation Marks</h3>
+        <label for="questioning">Questioning and Experimentation</label>
+        <input type="number" id="questioning" required>
+
+        <label for="interpretation">Interpretation and Application</label>
+        <input type="number" id="interpretation" required>
+
+        <label for="empathy">Empathy and Co-operation</label>
+        <input type="number" id="empathy" required>
+
+        <label for="aesthetic">Aesthetic and Creative Expression</label>
+        <input type="number" id="aesthetic" required>
+
+        <h3>Summative Evaluation Marks</h3>
+        <label for="bengali">Bengali</label>
+        <input type="number" id="bengali" required>
+
+        <label for="english">English</label>
+        <input type="number" id="english" required>
+
+        <label for="math">Mathematics</label>
+        <input type="number" id="math" required>
+
+        <button type="submit">Preview Marksheet</button>
+    </form>
+
+    <script>
+        document.getElementById('marksheet-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Collect form data
+            const schoolName = document.getElementById('school-name').value;
+            const udise = document.getElementById('udise').value;
+            const circle = document.getElementById('circle').value;
+            const district = document.getElementById('district').value;
+            const session = document.getElementById('session').value;
+            const studentName = document.getElementById('student-name').value;
+            const roll = document.getElementById('roll').value;
+            const motherName = document.getElementById('mother-name').value;
+            const fatherName = document.getElementById('father-name').value;
+            const studentId = document.getElementById('student-id').value;
+            const medium = document.getElementById('medium').value;
+
+            // Collect marks data
+            const questioning = document.getElementById('questioning').value;
+            const interpretation = document.getElementById('interpretation').value;
+            const empathy = document.getElementById('empathy').value;
+            const aesthetic = document.getElementById('aesthetic').value;
+
+            const bengali = document.getElementById('bengali').value;
+            const english = document.getElementById('english').value;
+            const math = document.getElementById('math').value;
+
+            // Store data in localStorage
+            localStorage.setItem('marksheetData', JSON.stringify({
+                schoolName, udise, circle, district, session, studentName, roll, motherName, fatherName, studentId, medium,
+                questioning, interpretation, empathy, aesthetic, bengali, english, math
+            }));
+
+            // Redirect to the preview page
+            window.location.href = 'marksheet-preview.html';
+        });
+    </script>
+
+</body>
+</html>
