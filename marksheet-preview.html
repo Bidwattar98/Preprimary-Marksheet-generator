@@ -1,33 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marksheet Preview</title>
     <style>
+        #marksheet-content {
+            margin: 15px;
+        }
+
         .header {
             text-align: center;
             margin-bottom: 20px;
         }
+
         .marksheet {
             width: 90%;
             margin: auto;
             border-collapse: collapse;
             text-align: center;
         }
-        .marksheet th, .marksheet td {
+
+        .marksheet th,
+        .marksheet td {
             border: 1px solid black;
             padding: 8px;
         }
+
         .student-info {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
             margin: 20px 0;
         }
+
+        .row {
+            display: contents;
+        }
+
+        .column {
+            padding: 2px 0;
+        }
+
         button {
             margin-top: 20px;
             padding: 10px 20px;
         }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+
+        .summary-row div {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        #result {
+            color: green;
+            /* Color for pass */
+        }
+
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .signature-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            /* Align items to the top */
+            margin-top: 40px;
+            padding: 10px;
+        }
+
+        .signature-block {
+            flex: 1;
+            text-align: center;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .signature-block .line {
+            border-top: 1px solid black;
+            margin-bottom: 5px;
+            /* Space between the line and text */
+            width: 80%;
+            /* Adjust line width */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .signature-block p {
+            margin: 0;
+            position: relative;
+            top: 10px;
+            /* Adjust the text to be in the middle of the remaining space below the line */
+            font-size: 14px;
+            /* Adjust font size */
+            font-weight: bold;
+            color: black;
+        }
     </style>
 </head>
+
 <body>
 
     <div id="marksheet-content">
@@ -40,12 +125,19 @@
         </div>
 
         <div class="student-info">
-            <p><strong>Name of the Student:</strong> <span id="student-name"></span></p>
-            <p><strong>Class:</strong> Preprimary</p>
-            <p><strong>Medium:</strong> <span id="medium"></span></p>
-            <p><strong>Roll No:</strong> <span id="roll"></span></p>
-            <p><strong>Mother's Name:</strong> <span id="mother-name"></span> &nbsp; <strong>Father's Name:</strong> <span id="father-name"></span></p>
-            <p><strong>Student ID:</strong> <span id="student-id"></span></p>
+            <div class="row">
+                <div class="column"><strong>Name of the Student:</strong> <span id="student-name"></span></div>
+                <div class="column"><strong>Class:</strong> Preprimary</div>
+                <div class="column"><strong>Roll No:</strong> <span id="roll"></span></div>
+                <div class="column"><strong>Medium:</strong> <span id="medium"></span></div>
+            </div>
+
+            <div class="row">
+                <div class="column"><strong>Mother's Name:</strong> <span id="mother-name"></span></div>
+                <div class="column"><strong>Father's Name:</strong> <span id="father-name"></span></div>
+                <div class="column"><strong>Student ID:</strong> <span id="student-id"></span></div>
+                <div class="column"></div>
+            </div>
         </div>
 
         <!-- Table for marksheet -->
@@ -54,6 +146,7 @@
                 <tr>
                     <th>Formative Indicator</th>
                     <th>Marks</th>
+                    <th>Grade (Formative)</th>
                     <th>Summative Indicator</th>
                     <th>Total</th>
                     <th>Grade</th>
@@ -63,6 +156,7 @@
                 <tr>
                     <td>Questioning and Experimentation</td>
                     <td id="questioning-marks"></td>
+                    <td id="questioning-grade"></td>
                     <td>Bengali</td>
                     <td id="bengali-marks"></td>
                     <td id="bengali-grade"></td>
@@ -70,6 +164,7 @@
                 <tr>
                     <td>Interpretation and Application</td>
                     <td id="interpretation-marks"></td>
+                    <td id="interpretation-grade"></td>
                     <td>English</td>
                     <td id="english-marks"></td>
                     <td id="english-grade"></td>
@@ -77,6 +172,7 @@
                 <tr>
                     <td>Empathy and Co-operation</td>
                     <td id="empathy-marks"></td>
+                    <td id="empathy-grade"></td>
                     <td>Mathematics</td>
                     <td id="math-marks"></td>
                     <td id="math-grade"></td>
@@ -84,6 +180,16 @@
                 <tr>
                     <td>Aesthetic and Creative Expression</td>
                     <td id="aesthetic-marks"></td>
+                    <td id="aesthetic-grade"></td>
+                    <td>Work and Health Education</td>
+                    <td id="work-education-marks"></td>
+                    <td id="work-education-grade"></td>
+                </tr>
+                <!-- New row for Participation under Formative Indicator -->
+                <tr>
+                    <td>Participation</td>
+                    <td id="participation-marks"></td>
+                    <td id="participation-grade"></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -91,7 +197,30 @@
             </tbody>
         </table>
 
-        <p><strong>Result:</strong> Promoted</p>
+        <!-- Footer for total marks, percentage, and grade -->
+        <div id="summary-row" class="summary-row">
+            <div>Grand Total: <span id="total-marks"></span></div>
+            <div>Overall Grade: <span id="total-grade"></span></div>
+            <div>Percentage: <span id="percentage"></span>%</div>
+            <div>Result: Promoted<span id="result"></span></div>
+        </div>
+
+        <div class="signature-row">
+            <div class="signature-block">
+                <div class="line"></div>
+                <p>Guardian's Signature</p>
+            </div>
+            <div class="signature-block">
+                <div class="line"></div>
+                <p>Class Teacher's Signature</p>
+            </div>
+            <div class="signature-block">
+                <div class="line"></div>
+                <p>HOI's Signature</p>
+            </div>
+        </div>
+
+
     </div>
 
     <button id="go-back">Edit</button>
@@ -118,36 +247,77 @@
             document.getElementById('medium').innerText = data.medium;
 
             // Formative marks
-            document.getElementById('questioning-marks').innerText = data.questioning;
-            document.getElementById('interpretation-marks').innerText = data.interpretation;
-            document.getElementById('empathy-marks').innerText = data.empathy;
-            document.getElementById('aesthetic-marks').innerText = data.aesthetic;
+            const formativeMarks = {
+                questioning: data.questioning,
+                interpretation: data.interpretation,
+                empathy: data.empathy,
+                aesthetic: data.aesthetic,
+                participation: data.participation
+            };
+
+            // Assigning formative marks and grades
+            for (const [indicator, marks] of Object.entries(formativeMarks)) {
+                document.getElementById(`${indicator}-marks`).innerText = marks;
+                document.getElementById(`${indicator}-grade`).innerText = calculateFormativeGrade(marks);
+            }
 
             // Summative marks and grades
             document.getElementById('bengali-marks').innerText = data.bengali;
-            document.getElementById('bengali-grade').innerText = calculateGrade(data.bengali);
+            document.getElementById('bengali-grade').innerText = calculateSummativeGrade(data.bengali);
             document.getElementById('english-marks').innerText = data.english;
-            document.getElementById('english-grade').innerText = calculateGrade(data.english);
+            document.getElementById('english-grade').innerText = calculateSummativeGrade(data.english);
             document.getElementById('math-marks').innerText = data.math;
-            document.getElementById('math-grade').innerText = calculateGrade(data.math);
+            document.getElementById('math-grade').innerText = calculateSummativeGrade(data.math);
+            document.getElementById('work-education-marks').innerText = data.workEducation;
+            document.getElementById('work-education-grade').innerText = calculateSummativeGrade(data.workEducation);
+
+            // Calculate summative total, percentage, and grade (out of 200)
+            const summativeMarks = {
+                bengali: data.bengali,
+                english: data.english,
+                math: data.math,
+                workEducation: data.workEducation
+            };
+
+            const totalSummativeMarks = Object.values(summativeMarks).reduce((acc, mark) => acc + parseFloat(mark), 0);
+            const summativePercentage = (totalSummativeMarks / 200) * 100;
+            const summativeGrade = calculateSummativeGrade(totalSummativeMarks / 4); // Divide by 4 to get average marks
+
+            // Display total summative marks, percentage, and grade
+            document.getElementById('total-marks').innerText = totalSummativeMarks;
+            document.getElementById('percentage').innerText = summativePercentage.toFixed(2);
+            document.getElementById('total-grade').innerText = summativeGrade;
         }
 
-        function calculateGrade(marks) {
-            if (marks >= 80) return 'A';
-            if (marks >= 65) return 'B';
-            if (marks >= 50) return 'C';
-            if (marks >= 35) return 'D';
-            return 'E';
+        // Formative grade calculation based on the provided criteria
+        function calculateFormativeGrade(marks) {
+            if (marks >= 37.5) return 'A';
+            if (marks >= 25) return 'B';
+            if (marks >= 12.5) return 'C';
+            return 'D';
+        }
+
+        // Summative grade calculation based on total marks
+        function calculateSummativeGrade(marks) {
+            if (marks >= 45) return 'A+';
+            if (marks >= 40) return 'A';
+            if (marks >= 35) return 'B+';
+            if (marks >= 30) return 'B';
+            if (marks >= 22.5) return 'C+';
+            if (marks >= 12.5) return 'C';
+            return 'D';
         }
 
         // Go back to the form for edits
-        document.getElementById('go-back').addEventListener('click', function() {
+        document.getElementById('go-back').addEventListener('click', function () {
             window.history.back();
         });
 
         // Download the entire marksheet content as PDF
-        document.getElementById('downloadBtn').addEventListener('click', function() {
+        document.getElementById('downloadBtn').addEventListener('click', function () {
             const { jsPDF } = window.jspdf;
+            const studentName = data.studentName; // Get the student name from the form data
+
             html2canvas(document.getElementById('marksheet-content')).then(canvas => {
                 const doc = new jsPDF('landscape', 'mm', 'a4');  // Set orientation to 'landscape'
                 const imgData = canvas.toDataURL('image/png');
@@ -169,10 +339,13 @@
                     heightLeft -= pageHeight;
                 }
 
-                doc.save('marksheet.pdf');
+                // Save the PDF with the student's name
+                const fileName = studentName ? `${studentName}.pdf` : 'marksheet.pdf';
+                doc.save(fileName);
             });
         });
-    </script>
 
+
+    </script>
 </body>
 </html>
