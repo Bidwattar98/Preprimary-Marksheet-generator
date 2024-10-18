@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,25 +9,30 @@
         body {
             font-family: Arial, sans-serif;
         }
+
         form {
             max-width: 600px;
             margin: auto;
         }
+
         label {
             display: block;
             margin-top: 10px;
         }
+
         input {
             width: 100%;
             padding: 8px;
             margin-top: 5px;
         }
+
         button {
             margin-top: 20px;
             padding: 10px 20px;
         }
     </style>
 </head>
+
 <body>
 
     <h2>Enter Marksheet Details</h2>
@@ -67,34 +73,44 @@
         <input type="text" id="medium" required>
 
         <!-- Marks Input -->
+        <!-- Marks Input -->
         <h3>Formative Evaluation Marks</h3>
         <label for="questioning">Questioning and Experimentation</label>
-        <input type="number" id="questioning" required>
+        <input type="number" id="questioning" min="0" max="50" required>
 
         <label for="interpretation">Interpretation and Application</label>
-        <input type="number" id="interpretation" required>
+        <input type="number" id="interpretation" min="0" max="50" required>
 
         <label for="empathy">Empathy and Co-operation</label>
-        <input type="number" id="empathy" required>
+        <input type="number" id="empathy" min="0" max="50" required>
 
         <label for="aesthetic">Aesthetic and Creative Expression</label>
-        <input type="number" id="aesthetic" required>
+        <input type="number" id="aesthetic" min="0" max="50" required>
+
+        <!-- New field for Participation -->
+        <label for="participation">Participation</label>
+        <input type="number" id="participation" min="0" max="50" required>
 
         <h3>Summative Evaluation Marks</h3>
         <label for="bengali">Bengali</label>
-        <input type="number" id="bengali" required>
+        <input type="number" id="bengali" min="0" max="50" required>
 
         <label for="english">English</label>
-        <input type="number" id="english" required>
+        <input type="number" id="english" min="0" max="50" required>
 
         <label for="math">Mathematics</label>
-        <input type="number" id="math" required>
+        <input type="number" id="math" min="0" max="50" required>
+
+        <!-- New field for Work Education -->
+        <label for="work-education">Work and Health Education</label>
+        <input type="number" id="work-education" min="0" max="50" required>
+
 
         <button type="submit">Preview Marksheet</button>
     </form>
 
     <script>
-        document.getElementById('marksheet-form').addEventListener('submit', function(event) {
+        document.getElementById('marksheet-form').addEventListener('submit', function (event) {
             event.preventDefault();
 
             // Collect form data
@@ -115,15 +131,18 @@
             const interpretation = document.getElementById('interpretation').value;
             const empathy = document.getElementById('empathy').value;
             const aesthetic = document.getElementById('aesthetic').value;
+            const participation = document.getElementById('participation').value;  // New Participation field
 
             const bengali = document.getElementById('bengali').value;
             const english = document.getElementById('english').value;
             const math = document.getElementById('math').value;
+            const workEducation = document.getElementById('work-education').value;  // New Work Education field
 
             // Store data in localStorage
             localStorage.setItem('marksheetData', JSON.stringify({
                 schoolName, udise, circle, district, session, studentName, roll, motherName, fatherName, studentId, medium,
-                questioning, interpretation, empathy, aesthetic, bengali, english, math
+                questioning, interpretation, empathy, aesthetic, participation,  // Store participation
+                bengali, english, math, workEducation  // Store work education
             }));
 
             // Redirect to the preview page
@@ -132,4 +151,5 @@
     </script>
 
 </body>
+
 </html>
