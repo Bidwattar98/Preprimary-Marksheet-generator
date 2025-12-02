@@ -107,6 +107,7 @@
         <button type="submit">Preview Marksheet</button>
     </form>
 
+
     <script>
         document.getElementById('marksheet-form').addEventListener('submit', function (event) {
             event.preventDefault();
@@ -124,23 +125,23 @@
             const studentId = document.getElementById('student-id').value;
             const medium = document.getElementById('medium').value;
 
-            // Collect marks data
-            const questioning = document.getElementById('questioning').value;
-            const interpretation = document.getElementById('interpretation').value;
-            const empathy = document.getElementById('empathy').value;
-            const aesthetic = document.getElementById('aesthetic').value;
-            const participation = document.getElementById('participation').value;  // New Participation field
+            // Collect marks data (no participation)
+            const questioning = document.getElementById('questioning').value;      // Bengali (Formative)
+            const interpretation = document.getElementById('interpretation').value; // English (Formative)
+            const empathy = document.getElementById('empathy').value;            // Mathematics (Formative)
+            const aesthetic = document.getElementById('aesthetic').value;        // Work & Health (Formative)
 
             const bengali = document.getElementById('bengali').value;
             const english = document.getElementById('english').value;
             const math = document.getElementById('math').value;
-            const workEducation = document.getElementById('work-education').value;  // New Work Education field
+            const workEducation = document.getElementById('work-education').value;
 
-            // Store data in localStorage
+            // Store data in localStorage (removed participation)
             localStorage.setItem('marksheetData', JSON.stringify({
-                schoolName, udise, circle, district, session, studentName, roll, motherName, fatherName, studentId, medium,
-                questioning, interpretation, empathy, aesthetic, participation,  // Store participation
-                bengali, english, math, workEducation  // Store work education
+                schoolName, udise, circle, district, session,
+                studentName, roll, motherName, fatherName, studentId, medium,
+                questioning, interpretation, empathy, aesthetic,
+                bengali, english, math, workEducation
             }));
 
             // Redirect to the preview page
